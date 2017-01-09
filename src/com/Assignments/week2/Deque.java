@@ -3,7 +3,7 @@ import java.util.Iterator;
 
 public class Deque<Item> implements Iterable<Item>{
     private Node first,last;//First and Last Nodes
-    private int no =0;//Total number of Nodes
+    private int n =0;//Total number of Nodes
     private class Node{
         /* Inner class - for storing a Node*/
         Item item;
@@ -11,21 +11,46 @@ public class Deque<Item> implements Iterable<Item>{
     }
     public Deque(){
     /* Constructor for the Deque class*/
-        first = last = new Node();
+        last = null;
+        first = last;
 
+    }
+
+    public boolean isEmpty(){
+        return first == last;
     }
 
     public int size(){
         /*Returns the total number of items in the Data structure*/
-        return no;
+        return n;
     }
 
     public void addFirst(Item item){
     /* Adds a Node to the beginning of the Deque*/
+        
+        Node newNode = first;
+        first = new Node();
+        first.item = item;
+        first.next = newNode;
+        n++;
+        if(n==1){
+            last = new Node();
+            last.next = null;
+            first.next = last;
+
+        }
+            
+        
     }
 
     public void addLast(Item item){
     /* Adds a Node to the end of the Deque*/
+
+        Node newNode = last;
+        last = new Node();
+        last.item = item;
+        last.next = null;
+        n++;
     }
 
     public void removeFirst(){
@@ -60,9 +85,15 @@ public class Deque<Item> implements Iterable<Item>{
         }
     }
 
-
     public static void main(String args[]){
-        System.out.println("Hello");
+        System.out.println("begin5");
+        Deque<String> d = new Deque<String>();
+        d.addFirst("b");
+        d.addFirst("a");
+        d.addLast("c");
+        d.addLast("d");
+        for(String s : d)
+            System.out.println(s);      
     }
 
 }
