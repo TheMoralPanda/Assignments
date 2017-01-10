@@ -109,7 +109,7 @@ public class Deque<Item> implements Iterable<Item>{
     }
 
     public static void main(String args[]){
-        System.out.println("begin6");
+        System.out.println("begin7");
         Deque<String> d = new Deque<String>();
         
         //Unit test for Deque
