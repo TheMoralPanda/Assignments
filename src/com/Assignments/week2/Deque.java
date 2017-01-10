@@ -7,7 +7,7 @@ public class Deque<Item> implements Iterable<Item>{
     private class Node{
         /* Inner class - for storing a Node*/
         Item item;
-        Node next;
+        Node next ,previous;
     }
     public Deque(){
     /* Constructor for the Deque class*/
@@ -27,21 +27,25 @@ public class Deque<Item> implements Iterable<Item>{
 
     public void addFirst(Item item){
     /* Adds a Node to the beginning of the Deque*/
-        
+        if(item==null)
+            throw new java.lang.NullPointerException();
         Node newNode = first;
         first = new Node();
         first.item = item;
         first.next = newNode;
+        first.previous = null;
         n++;
         if(n==1)
-          last = first;
-            
-        
+            last = first;
+        else
+            newNode.previous = first;
     }
 
     public void addLast(Item item){
     /* Adds a Node to the end of the Deque*/
-         n++;
+        if(item==null)
+            throw new java.lang.NullPointerException();
+        n++;
         Node newNode = new Node();
         newNode.item = item;
         newNode.next = null;
@@ -49,6 +53,7 @@ public class Deque<Item> implements Iterable<Item>{
             first = last = newNode;
         }            
         else{
+            newNode.previous = last;
             last.next = newNode;
             last = newNode;
         }      
@@ -56,12 +61,25 @@ public class Deque<Item> implements Iterable<Item>{
 
     public void removeFirst(){
     /* Removes a Node from the beginning of the Deque*/
-     System.out.println(first.item);
+     if(first!=null) {
+         Node newNode = first.next;
+         first.next = first.previous = null;
+         first = newNode;
+         n--;
+     }else
+        throw new java.lang.UnsupportedOperationException();
     }
 
     public void removeLast(){
     /* Removes a Node from the end of the Deque*/
-     System.out.println(last.item);
+     if(last!=null) {
+         Node oldLast = last.previous;
+         last.previous = null;
+         last = oldLast;
+         last.next = null;
+         n--;
+     }else
+         throw new java.lang.UnsupportedOperationException();
     }
 
     /*Iterator for the Deque API*/
@@ -79,9 +97,11 @@ public class Deque<Item> implements Iterable<Item>{
         }
 
         public void remove(){
-
+            throw new java.lang.UnsupportedOperationException();
         }
         public Item next(){
+            if(current.next== null)
+                throw new java.util.NoSuchElementException();
             Item item = current.item;
             current = current.next;
             return item;
@@ -117,7 +137,7 @@ public class Deque<Item> implements Iterable<Item>{
         System.out.println(d.size());
         d.removeFirst();
         d.removeLast();
-
+        System.out.println(d.size());
         for(String s : d)
             System.out.println(s);      
     }
