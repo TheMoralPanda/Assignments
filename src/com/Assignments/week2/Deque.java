@@ -2,7 +2,7 @@ import java.lang.Iterable;
 import java.util.Iterator;
 
 public class Deque<Item> implements Iterable<Item>{
-    private Node first,last;//First and Last Nodes
+    public Node first,last;//First and Last Nodes
     private int n =0;//Total number of Nodes
     private class Node{
         /* Inner class - for storing a Node*/
@@ -17,7 +17,7 @@ public class Deque<Item> implements Iterable<Item>{
     }
 
     public boolean isEmpty(){
-        return first == last;
+        return (n>0)?false:true;
     }
 
     public int size(){
@@ -33,32 +33,35 @@ public class Deque<Item> implements Iterable<Item>{
         first.item = item;
         first.next = newNode;
         n++;
-        if(n==1){
-            last = new Node();
-            last.next = null;
-            first.next = last;
-
-        }
+        if(n==1)
+          last = first;
             
         
     }
 
     public void addLast(Item item){
     /* Adds a Node to the end of the Deque*/
-
-        Node newNode = last;
-        last = new Node();
-        last.item = item;
-        last.next = null;
-        n++;
+         n++;
+        Node newNode = new Node();
+        newNode.item = item;
+        newNode.next = null;
+        if(n==1){
+            first = last = newNode;
+        }            
+        else{
+            last.next = newNode;
+            last = newNode;
+        }      
     }
 
     public void removeFirst(){
     /* Removes a Node from the beginning of the Deque*/
+     System.out.println(first.item);
     }
 
     public void removeLast(){
     /* Removes a Node from the end of the Deque*/
+     System.out.println(last.item);
     }
 
     /*Iterator for the Deque API*/
@@ -86,12 +89,35 @@ public class Deque<Item> implements Iterable<Item>{
     }
 
     public static void main(String args[]){
-        System.out.println("begin5");
+        System.out.println("begin6");
         Deque<String> d = new Deque<String>();
-        d.addFirst("b");
-        d.addFirst("a");
-        d.addLast("c");
-        d.addLast("d");
+        
+        //Unit test for Deque
+        System.out.println(d.size());
+        System.out.println(d.isEmpty());
+        d.removeFirst();
+        d.removeLast();
+        d.addLast("300");
+        d.removeFirst();
+        d.removeLast();
+        System.out.println(d.size());
+        System.out.println(d.isEmpty());
+        d.addFirst("200");
+
+        d.removeFirst();
+        d.removeLast();
+        System.out.println(d.size());
+        System.out.println(d.isEmpty());
+
+
+        for(int i=1;i<10;i++){
+            d.addFirst(String.valueOf(i));
+            d.addLast(String.valueOf(i));
+        }
+        System.out.println(d.size());
+        d.removeFirst();
+        d.removeLast();
+
         for(String s : d)
             System.out.println(s);      
     }
