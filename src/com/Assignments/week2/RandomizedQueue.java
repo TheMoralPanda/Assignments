@@ -1,3 +1,5 @@
+package com.Assignments.week2;
+
 import java.lang.Iterable;
 import java.util.Iterator;
 import edu.princeton.cs.algs4.StdRandom;
@@ -46,14 +48,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 	//Function to remove and return a random Item from the queue
 	public Item dequeue(){
-		if(isEmpty())
+		if(n==0)
 			throw new java.util.NoSuchElementException();
 		int val = StdRandom.uniform(0,n);
 		Item item = s[val];
 		s[val]=null;
 		n--;
-		s[val] = s[n-1];
-		s[n-1] = null;
+		s[val] = s[n];
+		s[n] = null;
 		if(n>0 && n==s.length/4)
 			resize(s.length/2);
 		return item;
@@ -63,7 +65,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 	//Function to return a random Item from the queue, but do not remove it.
 	public Item sample(){
-		if(isEmpty())
+		if(n==0)
 			throw new java.util.NoSuchElementException();
 		int val = StdRandom.uniform(0,n);
 		Item item = s[val];	
@@ -83,14 +85,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         private int index;
 
         public RQueueIterator(){
-        	iteratorArray = (Item[]) new Object[s.length];
+        	iteratorArray = (Item[]) new Object[n];
         	for(int i=0;i<n;i++)
         		iteratorArray[i] = s[i];
         	StdRandom.shuffle(iteratorArray);
         	index = 0;
         }
         public boolean hasNext(){
-            return iteratorArray[index+1]!=null;
+            if(index<n)
+                return iteratorArray[index]!=null;
+            return false;
         }
 
         public void remove(){
@@ -108,14 +112,28 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 		RandomizedQueue<Integer> q = new RandomizedQueue<Integer>();
 		q.enqueue(2);
+        System.out.println("The size is :"+q.size());
+        System.out.println(q.sample());
 		q.enqueue(3);
+        System.out.println("The size is :"+q.size());
+        System.out.println(q.sample());
 		q.enqueue(4);
-		System.out.println(q.dequeue());
-		q.enqueue(5);
-		System.out.println(q.sample());
+        q.enqueue(5);
+        System.out.println("The size is :"+q.size());
+        System.out.println(q.sample());
+        System.out.println(q.sample());
+
+
+        //System.out.println(q.sample());
+        //q.enqueue(5);
+        //q.enqueue(6);
+        //q.enqueue(7);
+        //q.enqueue(8);
+		//System.out.println(q.sample());
+
 		for(int i : q)
 			System.out.println("-"+i);
-		System.out.println(q.size());
+		//System.out.println(q.size());
 
 	}
 }
