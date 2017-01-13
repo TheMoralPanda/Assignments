@@ -1,11 +1,6 @@
-package com.Assignments.week2;
-
 import java.lang.Iterable;
 import java.util.Iterator;
 import edu.princeton.cs.algs4.StdRandom;
-/**
- * Created by Vigneshwar_V on 1/11/2017.
- */
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 	
@@ -107,33 +102,4 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
 
-	//Test client to do unit and functional testing of the queue
-	public static void main(String[] args){
-
-		RandomizedQueue<Integer> q = new RandomizedQueue<Integer>();
-		q.enqueue(2);
-        System.out.println("The size is :"+q.size());
-        System.out.println(q.sample());
-		q.enqueue(3);
-        System.out.println("The size is :"+q.size());
-        System.out.println(q.sample());
-		q.enqueue(4);
-        q.enqueue(5);
-        System.out.println("The size is :"+q.size());
-        System.out.println(q.sample());
-        System.out.println(q.sample());
-
-
-        //System.out.println(q.sample());
-        //q.enqueue(5);
-        //q.enqueue(6);
-        //q.enqueue(7);
-        //q.enqueue(8);
-		//System.out.println(q.sample());
-
-		for(int i : q)
-			System.out.println("-"+i);
-		//System.out.println(q.size());
-
-	}
 }

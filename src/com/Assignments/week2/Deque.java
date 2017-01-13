@@ -2,7 +2,7 @@ import java.lang.Iterable;
 import java.util.Iterator;
 
 public class Deque<Item> implements Iterable<Item>{
-    public Node first,last;//First and Last Nodes
+    private Node first,last;//First and Last Nodes
     private int n =0;//Total number of Nodes
     private class Node{
         /* Inner class - for storing a Node*/
@@ -59,25 +59,29 @@ public class Deque<Item> implements Iterable<Item>{
         }      
     }
 
-    public void removeFirst(){
+    public Item removeFirst(){
     /* Removes a Node from the beginning of the Deque*/
      if(first!=null) {
          Node newNode = first.next;
+         Item item = first.item;
          first.next = first.previous = null;
          first = newNode;
          n--;
+         return item;
      }else
         throw new java.util.NoSuchElementException();
     }
 
-    public void removeLast(){
+    public Item removeLast(){
     /* Removes a Node from the end of the Deque*/
      if(last!=null && n>0) {
          Node oldLast = last.previous;
+         Item item = last.item;
          last.previous = null;
          last = oldLast;
          last.next = null;
          n--;
+         return item;
      }else
          throw new java.util.NoSuchElementException();
     }
@@ -106,43 +110,6 @@ public class Deque<Item> implements Iterable<Item>{
             current = current.next;
             return item;
         }
-    }
-
-    public static void main(String args[]){
-        System.out.println("begin8");
-        Deque<String> d = new Deque<String>();
-        
-        //Unit test for Deque
-        System.out.println(d.size());
-        System.out.println(d.isEmpty());
-        //d.removeFirst();
-        //d.removeLast();
-        //d.addLast(null);
-        //d.removeFirst();
-        //d.removeLast();
-        System.out.println(d.size());
-        System.out.println(d.isEmpty());
-        d.addFirst("200");
-
-        d.removeFirst();
-        System.out.println(d.size());
-        System.out.println(d.isEmpty());
-        //d.removeLast();
-        d.addLast("300");
-        System.out.println(d.size());
-        System.out.println(d.isEmpty());
-
-
-        for(int i=1;i<10;i++){
-            d.addFirst(String.valueOf(i));
-            d.addLast(String.valueOf(i));
-        }
-        System.out.println(d.size());
-        d.removeFirst();
-        d.removeLast();
-        System.out.println(d.size());
-        for(String s : d)
-            System.out.println(s);      
     }
 
 }
