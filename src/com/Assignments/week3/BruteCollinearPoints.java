@@ -3,46 +3,75 @@ package com.Assignments.week3;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
-
+import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BruteCollinearPoints {
     /* Data members */
     private ArrayList<LineSegment> lineSegments;
+    private HashMap<Point,Point> lineSeg;
 
 
-    public BruteCollinearPoints(Point[] points){
+    public BruteCollinearPoints(Point[] points) {
         /* Constructor for the class
         *  Also executes and finds all the line segments containing 4 points*/
-        if(points == null)
+        if (points == null)
             throw new java.lang.NullPointerException();
-        for(int i=0;i<points.length;i++)
-            if(points[i]==null)
+        for (int i = 0; i < points.length; i++)
+            if (points[i] == null)
                 throw new java.lang.NullPointerException();
         lineSegments = new ArrayList<LineSegment>();
+        lineSeg = new HashMap<Point, Point>();
         LineSegment ls;
-        for( int i=0;i<points.length;i++)
-            for(int j=i+1;j<points.length;j++)
-                for(int k=j+1;k<points.length;k++)
-                    for(int l=k+1;l<points.length;l++)
-                        if(checkDistinct(points[i],points[j],points[k],points[l])){
-                            if(checkCollinear(points[i],points[j],points[k],points[l])){
-                                ls = new LineSegment(points[i],points[l]);
-                                lineSegments.add(ls);
-                                System.out.println(ls.toString());
+        for (int i = 0; i < points.length; i++)
+            for (int j = 0; j < points.length; j++){
+                if(j==i)
+                    continue;
+                for (int k = 0; k < points.length; k++){
+                    if(k==i || k==j)
+                        continue;
+                    for (int l = 0; l < points.length; l++){
+                        if(l==i || l==j || l==k)
+                            continue;
+                        if (checkDistinct(points[i], points[j], points[k], points[l])) {
+                            if (checkCollinear(points[i], points[j], points[k], points[l])) {
+                                Point[] p = {points[i], points[j], points[k], points[l]};
+                                Arrays.sort(p);
+                                if(checkDuplicate(p[0],p[3])==false) {
+                                    lineSeg.put(p[0], p[3]);
+                                    ls = new LineSegment(p[0], p[p.length - 1]);
+                                    lineSegments.add(ls);
+                                }
                             }
                         }
+           }   }   }
+    }
+
+    private boolean checkDuplicate(Point p, Point q) {
+        if (lineSeg.containsKey(p) == false && lineSeg.containsKey(q) == false)
+            return false;
+        else if (lineSeg.containsKey(p) == true) {
+            if (lineSeg.get(p).compareTo(q) == 0)
+                return true;
+        } else if (lineSeg.containsKey(q) == true) {
+            if (lineSeg.get(q).compareTo(p) == 0)
+                return true;
+        }
+        return false;
     }
 
     private boolean checkCollinear(Point p, Point q, Point r, Point s){
         double first = p.slopeTo(q), second = p.slopeTo(r), third = p.slopeTo(s);
         if(first == second)
-            if(second == third)
+            if(second == third){
                 return true;
+            }
         return false;
     }
 
     private boolean checkDistinct(Point p, Point q, Point r, Point s){
+
         if(p.compareTo(q)!=0 && p.compareTo(r)!=0 && p.compareTo(s)!=0 && q.compareTo(r)!=0 && q.compareTo(s)!=0 && r.compareTo(s)!=0)
             return true;
         else
@@ -58,10 +87,11 @@ public class BruteCollinearPoints {
     public LineSegment[] segments(){
         /* To return the list of line segments found in the given points */
         return lineSegments.toArray(new LineSegment[lineSegments.size()]);
+
+
     }
 
     public static void main(String[] args) {
-
         // read the n points from a file
         In in = new In(args[0]);
         int n = in.readInt();
@@ -80,7 +110,7 @@ public class BruteCollinearPoints {
             p.draw();
         }
         StdDraw.show();
-        System.out.println(points.length);
+
         // print and draw the line segments
         BruteCollinearPoints collinear = new BruteCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
