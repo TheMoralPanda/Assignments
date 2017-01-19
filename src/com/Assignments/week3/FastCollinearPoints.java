@@ -28,12 +28,15 @@ public class FastCollinearPoints {
         Point[] sPoints ;
         lineSegments = new ArrayList<LineSegment>();
         lineSeg = new HashMap<Point, Point>();
+
         for(Point p : points){
+            System.out.println("The point is"+p);
             sPoints = points.clone();
+            printArray(sPoints);
             Arrays.sort(sPoints,p.slopeOrder());
-           // System.out.print("The Sorted array based on p - ");
-           // printArray(sPoints);
+           printArray(sPoints);
             checkCollinear(sPoints);
+
         }
     }
 
@@ -47,30 +50,36 @@ public class FastCollinearPoints {
         ArrayList<Point> segment = new ArrayList<Point>();
         LineSegment lS;
         segment.add(points[0]);
-        for(int i=1;i<points.length;i++){
-            for(int j=i+1;j<points.length;j++){
 
-                double slopeI = points[0].slopeTo(points[i]);
-                double slopeJ = points[0].slopeTo(points[j]);
-                if(slopeI==slopeJ){
-                    continue;
-                }else{
-                    if((j-i)>=3)
-                        for(int k=i;k<=j;k++)
-                            segment.add(points[k]);
-                    break;
+        for(int i=1, start =i, end=i+1;i<points.length-1;i++){
+            double slopeI = points[0].slopeTo(points[i]);
+            double slopeJ = points[0].slopeTo(points[i+1]);
+            if(slopeI==slopeJ) {
+                end++;
+                continue;
+            }else{
+
+                if(end-start>=3){
+                    for(int k=start;k<end;k++)
+                        segment.add(points[k]);
+                    //System.out.println("Before Sorting the segment");
+                    //printArray(segment.toArray(new Point[segment.size()]));
+                    //System.out.println("After Sorting the segment");
+                    Collections.sort(segment);
+                    //printArray(segment.toArray(new Point[segment.size()]));
+                    //System.out.println("*************************************");
+                    if(checkDuplicate(segment.get(0),segment.get(segment.size()-1))==false) {
+                        //Collections.sort(segment);
+                        //System.out.println(segment.toString());
+                        lineSeg.put(segment.get(0),segment.get(segment.size()-1));
+                        lS = new LineSegment(segment.get(0),segment.get(segment.size()-1));
+                        lineSegments.add(lS);
+                    }
                 }
+                start = end;
+                end++;
             }
-        }
-
-        if(checkDuplicate(segment.get(0),segment.get(segment.size()-1))==false) {
-            Collections.sort(segment);
-            System.out.println(segment.toString());
-            lineSeg.put(segment.get(0),segment.get(segment.size()-1));
-            lS = new LineSegment(segment.get(0),segment.get(segment.size()-1));
-            lineSegments.add(lS);
-        }
-
+            }
     }
 
     private boolean checkDuplicate(Point p, Point q) {
@@ -107,22 +116,22 @@ public class FastCollinearPoints {
             points[i] = new Point(x, y);
         }
 
-        // draw the points
-        //StdDraw.enableDoubleBuffering();
-        //StdDraw.setXscale(0, 32768);
-        //StdDraw.setYscale(0, 32768);
+         //draw the points
+        StdDraw.enableDoubleBuffering();
+        StdDraw.setXscale(0, 32768);
+        StdDraw.setYscale(0, 32768);
         for (Point p : points) {
-           // p.draw();
+            p.draw();
         }
-        //StdDraw.show();
+        StdDraw.show();
 
         // print and draw the line segments
         FastCollinearPoints collinear = new FastCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
             StdOut.println(segment);
-       //     segment.draw();
+            segment.draw();
         }
-       // StdDraw.show();
+        StdDraw.show();
         System.out.println("THe total list is: "+collinear.numberOfSegments());
     }
 }
