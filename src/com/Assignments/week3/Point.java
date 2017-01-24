@@ -1,4 +1,4 @@
-package com.Assignments.week3;
+//package com.Assignments.week3;
 /******************************************************************************
  *  Compilation:  javac Point.java
  *  Execution:    java Point
@@ -60,10 +60,12 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
+        if(that==null)
+            throw new java.lang.NullPointerException();
         if(this.y==that.y && this.x==that.x)
             return Double.NEGATIVE_INFINITY;
         if(this.y == that.y)
-            return new Double(-0.0);
+            return new Double(0.0);
         if(this.x == that.x)
             return Double.POSITIVE_INFINITY;
         return (double)(that.y-this.y)/(that.x-this.x);
@@ -83,6 +85,8 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
+        if(that==null)
+            throw new java.lang.NullPointerException();
         if(this.y < that.y)
             return -1;
         else if(this.y > that.y)
