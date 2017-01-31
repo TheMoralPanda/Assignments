@@ -11,6 +11,7 @@ public class Solver {
 
     public boolean isSolvable(){
         /* Returns if the initial board is solvable or not */
+        return true;
     }
 
     public int moves(){
@@ -18,10 +19,12 @@ public class Solver {
         Returns -1 if unsolvable.
 
          */
+        return 0;
     }
 
     public Iterable<Board> solution(){
         /* Returns the sequence of boards in a shortest solution; Null if unsolvable*/
+        return null;
     }
 
     public static void main(String args[]){
