@@ -125,27 +125,81 @@ public class Board {
         /* All Neigboring boards */
         //(i-1,j); (i+1,j); (i,j-1); (i,j+1)
         Stack<Board> bstack = new Stack<Board>();
-        Board temp = new Board(board);
-        //(oi-1, oj)
-        int i = temp.oi, j=temp.oj;
-        //(i-1, j)
-        if (i>0 && i<n) {
-            int t = temp.board[i][j];
-            temp.board[i][j] = temp.board[i-1][j];
-            temp.board[i-1][j] = t;
-            bstack.push(temp);
+        //Board temp;
+
+        int i = this.oi, j=this.oj;
+        int tv;
+        int [][]t = deepCopy();
+
+        if(isValidneighbor(i-1,j)) {
+            tv = t[i][j];
+            t[i][j] = t[i-1][j];
+            t[i-1][j] = tv;
+            bstack.push(new Board(t));
+
         }
+
+        t = deepCopy();
+        if(isValidneighbor(i+1,j)) {
+            tv = t[i][j];
+            t[i][j] = t[i+1][j];
+            t[i+1][j] = tv;
+            bstack.push(new Board(t));
+
+        }
+
+        t = deepCopy();
+        if(isValidneighbor(i,j-1)) {
+            tv = t[i][j];
+            t[i][j] = t[i][j-1];
+            t[i][j-1] = tv;
+            bstack.push(new Board(t));
+
+        }
+
+        t = deepCopy();
+
+        if(isValidneighbor(i,j+1)) {
+            tv = t[i][j];
+            t[i][j] = t[i][j+1];
+            t[i][j+1] = tv;
+            bstack.push(new Board(t));
+
+        }
+
+        System.out.println("stack size"+bstack.size());
         return bstack;
     }
 
-    public String toString(){
-        /* Returns the string representation of this board */
-        for(int i=0;i<board.length;i++){
-            for(int j=0;j<board.length;j++)
-                System.out.print(board[i][j]+" ");
-            System.out.println();
+    private int[][] deepCopy() {
+        if (board == null) {
+            return null;
         }
-        return null;
+
+        int[][] result = new int[board.length][];
+        for (int i = 0; i < n; i++) {
+            result[i] = Arrays.copyOf(board[i], board[i].length);
+        }
+        return result;
+    }
+
+    private boolean isValidneighbor(int k, int l){
+        boolean inBoundsK = (k >= 0) && (k < n);
+        boolean inBoundsL = (l >= 0) && (l < n);
+        return (inBoundsK && inBoundsL)?true:false;
+    }
+
+
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(n + "\n");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                s.append(String.format("%2d ", board[i][j]));
+            }
+            s.append("\n");
+        }
+        return s.toString();
     }
 
     public static void main(String[] args) {
@@ -159,7 +213,10 @@ public class Board {
                 blocks[i][j] = in.readInt();
         Board initial = new Board(blocks);
         initial.toString();
-        initial.twin().toString();
+        //initial.twin().toString();
+        System.out.println("The stack contents are as follows");
+        for(Board b: initial.neighbors())
+            System.out.println(b);
         //System.out.println("Is Goal value - "+ initial.isGoal());
 
         // solve the puzzle
