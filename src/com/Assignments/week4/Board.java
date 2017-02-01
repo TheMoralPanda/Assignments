@@ -1,9 +1,6 @@
 package com.Assignments.week4;
 
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.*;
 
 import java.lang.Math;
 import java.util.Arrays;
@@ -13,12 +10,18 @@ import java.util.Arrays;
  */
 public class Board {
     private int[][] board;
-    private int n;
+    private int n,oi,oj;
 
     public Board(int[][] blocks){
         /*Constructor for the Board class. Initialises a board from a n*n array of blocks*/
-        this.board = blocks;
+        board = Arrays.copyOf(blocks,blocks.length);
         n = board.length;
+        for(int i=0;i<n;i++)
+            for(int j=0;j<n;j++)
+                if(board[i][j]==0)
+                {
+                    oi = i; oj=j;
+                }
     }
 
     public int dimension(){
@@ -85,19 +88,19 @@ public class Board {
         //for(int i=0;i<n;i++)
         //    for(int j=0;j<n;j++)
         int i=0 , j=0;
-        while(twin[i][j]!=0) {
+        while(true){
             i = StdRandom.uniform(n);
             j = StdRandom.uniform(n);
-
-            //(i-1,j); (i+1,j); (i,j-1); (i,j+1)
-            if ( i!=0 && i < n && j - 1 < n && twin[i][j - 1] != 0) {
+            System.out.println("i,j is "+i+" ,"+j);
+            if ( j!=0 && i < n && j - 1 < n && twin[i][j - 1] != 0 && twin[i][j]!=0) {
                 int temp = twin[i][j];
                 twin[i][j] = twin[i][j - 1];
                 twin[i][j - 1] = temp;
                 Board twinBoard = new Board(twin);
                 return twinBoard;
+
             }
-            if (j!=n-1 && i < n && j + 1 < n && twin[i][j + 1] != 0) {
+            if (j!=n-1 && i < n && j + 1 < n && twin[i][j + 1] != 0 && twin[i][j]!=0) {
                 int temp = twin[i][j];
                 twin[i][j] = twin[i][j + 1];
                 twin[i][j + 1] = temp;
@@ -105,17 +108,35 @@ public class Board {
                 return twinBoard;
             }
         }
-        return null;
+
     }
 
     public boolean equals(Object y){
         /* Does this board equals y */
+        Board that = (Board)y;
+        for(int i=0;i<n;i++)
+            for(int j=0;j<n;j++)
+                if(board[i][j]!=that.board[i][j])
+                    return false;
         return true;
     }
 
-    //public Iterable<Board> neighbors(){
+    public Iterable<Board> neighbors(){
         /* All Neigboring boards */
-    //}
+        //(i-1,j); (i+1,j); (i,j-1); (i,j+1)
+        Stack<Board> bstack = new Stack<Board>();
+        Board temp = new Board(board);
+        //(oi-1, oj)
+        int i = temp.oi, j=temp.oj;
+        //(i-1, j)
+        if (i>0 && i<n) {
+            int t = temp.board[i][j];
+            temp.board[i][j] = temp.board[i-1][j];
+            temp.board[i-1][j] = t;
+            bstack.push(temp);
+        }
+        return bstack;
+    }
 
     public String toString(){
         /* Returns the string representation of this board */
