@@ -90,14 +90,14 @@ public class Board {
             j = StdRandom.uniform(n);
 
             //(i-1,j); (i+1,j); (i,j-1); (i,j+1)
-            if ( i < n && j - 1 < n && twin[i][j - 1] != 0) {
+            if ( i!=0 && i < n && j - 1 < n && twin[i][j - 1] != 0) {
                 int temp = twin[i][j];
                 twin[i][j] = twin[i][j - 1];
                 twin[i][j - 1] = temp;
                 Board twinBoard = new Board(twin);
                 return twinBoard;
             }
-            if (i < n && j + 1 < n && twin[i][j + 1] != 0) {
+            if (j!=n-1 && i < n && j + 1 < n && twin[i][j + 1] != 0) {
                 int temp = twin[i][j];
                 twin[i][j] = twin[i][j + 1];
                 twin[i][j + 1] = temp;
