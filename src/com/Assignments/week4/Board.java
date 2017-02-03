@@ -167,7 +167,7 @@ public class Board {
 
         }
 
-        System.out.println("stack size"+bstack.size());
+        //System.out.println("stack size"+bstack.size());
         return bstack;
     }
 
