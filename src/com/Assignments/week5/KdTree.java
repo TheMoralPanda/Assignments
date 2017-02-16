@@ -64,7 +64,7 @@ public class KdTree {
             cmp = (p.y() < x.p.y()) ? -1 : ((p.y() > x.p.y()) ? +1 : 0);
             if(cmp<0)
                 ymax = x.p.y();
-            else if(cmp<0)
+            else if(cmp>0)
                 ymin = x.p.y();
         }
         if(cmp<0)
