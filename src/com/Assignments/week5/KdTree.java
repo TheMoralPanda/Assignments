@@ -1,6 +1,7 @@
 package com.Assignments.week5;
 
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Created by Vigneshwar_V on 2/13/2017.
  */
 public class KdTree {
-    private Node root;
+    public Node root;
     public int n;
 
     private static class Node{
@@ -45,27 +46,35 @@ public class KdTree {
         /* Add a point to the set if its not already there.*/
         if(p==null)
             throw new java.lang.NullPointerException();
-        root = insert(root, p, 0);
+        root = insert(root, p, 0, 0.0,0.0,1.0,1.0);
         n++;
     }
 
-    private Node insert(Node x, Point2D p, int level){
+    private Node insert(Node x, Point2D p, int level,double xmin,double ymin,double xmax,double ymax){
         if(x == null)
-            return new Node(p,null,null, null);
+            return new Node(p,new RectHV(xmin,ymin,xmax,ymax),null, null);
         int cmp;
-        if(level==0 || level%2==0)
-            cmp = (p.x() < x.p.x())?-1:((p.x()>x.p.x())?+1:0);
-        else
-            cmp = (p.y() < x.p.y())?-1:((p.y()>x.p.y())?+1:0);
+        if(level%2==0) {
+            cmp = (p.x() < x.p.x()) ? -1 : ((p.x() > x.p.x()) ? +1 : 0);
+            if(cmp<0)
+                xmax = x.p.x();
+            else if(cmp>0)
+                xmin = x.p.x();
+        }else {
+            cmp = (p.y() < x.p.y()) ? -1 : ((p.y() > x.p.y()) ? +1 : 0);
+            if(cmp<0)
+                ymax = x.p.y();
+            else if(cmp<0)
+                ymin = x.p.y();
+        }
         if(cmp<0)
-            x.lb = insert(x.lb, p, level+1);
+            x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
         else if(cmp>0)
-            x.rt = insert(x.rt, p, level+1);
+            x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
         else{
             x.p = p;
             n--;
         }
-
         return x;
     }
 
@@ -147,6 +156,21 @@ public class KdTree {
         }
         return champ;*/
         return null;
+    }
+
+    public Iterable<Point2D> keys()
+    {
+        Queue<Point2D> q = new Queue<Point2D>();
+        inorder(root, q);
+        return q;
+    }
+    private void inorder(Node x, Queue<Point2D> q)
+    {
+        if (x == null) return;
+        inorder(x.lb, q);
+        q.enqueue(x.p);
+        System.out.println(x.p.toString()+"   -   "+x.rect.xmin()+","+x.rect.ymin()+" * "+x.rect.xmax()+" ,"+x.rect.ymax());
+        inorder(x.rt, q);
     }
 
     public static void main(String args[]){
