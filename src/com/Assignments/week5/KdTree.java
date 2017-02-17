@@ -1,4 +1,4 @@
-package com.Assignments.week5;
+//package com.Assignments.week5;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
@@ -47,12 +47,14 @@ public class KdTree {
         if(p==null)
             throw new java.lang.NullPointerException();
         root = insert(root, p, 0, 0.0,0.0,1.0,1.0);
-        n++;
+
     }
 
     private Node insert(Node x, Point2D p, int level,double xmin,double ymin,double xmax,double ymax){
-        if(x == null)
+        if(x == null){
+            n++;
             return new Node(p,new RectHV(xmin,ymin,xmax,ymax),null, null);
+        }
         int cmp;
         if(level%2==0) {
             cmp = (p.x() < x.p.x()) ? -1 : ((p.x() > x.p.x()) ? +1 : 0);
@@ -73,31 +75,46 @@ public class KdTree {
             x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
         else{
             x.p = p;
-            n--;
         }
         return x;
     }
 
-    public boolean contains(Point2D p){
-        /* Does the set contain the point or not*/
-        if(p==null)
-            throw new java.lang.NullPointerException();
-        return get(p)?true:false;
+    public boolean contains(Point2D p) {
+        return contains(root, p, 1);
+    }
+    private boolean contains(Node x, Point2D p, int depth) {
+        if (x == null) {
+            return false;
+        }
+        if (x.p.equals(p)) {
+            return true;
+        }
+        if (depth % 2 == 0) {
+            //the upper level is horizontal, so this level should be vertical, check y
+            if (p.x() < x.p.x()) {
+                // left
+                return contains(x.lb, p, depth + 1);
+            }
+            else {
+                //right
+                return contains(x.rt, p, depth + 1);
+            }
+
+        }
+        else {
+            // the upper level is vertical, so this level should be horizontal, check x
+            if (p.y() < x.p.y()) {
+                // bottom
+                return contains(x.lb, p, depth + 1);
+            }
+            else {
+                // top
+                return contains(x.rt, p, depth + 1);
+            }
+        }
+
     }
 
-    private boolean get(Point2D p){
-        Node x = root;
-        while (x != null)
-        {
-            int cmp = p.compareTo(x.p);
-            if      (cmp  < 0) x = x.lb;
-            else if (cmp  > 0) x = x.rt;
-            else
-            if (cmp == 0)
-                return true;
-        }
-        return false;
-    }
 
     public void draw() {
         draw(root, 1, new RectHV(0.0, 0.0, 1.0, 1.0));
@@ -172,7 +189,7 @@ public class KdTree {
     }
 
 
-    public Iterable<Point2D> keys()
+   /* public Iterable<Point2D> keys()
     {
         Queue<Point2D> q = new Queue<Point2D>();
         inorder(root, q);
@@ -186,7 +203,7 @@ public class KdTree {
         System.out.println(x.p.toString()+"   -   "+x.rect.xmin()+","+x.rect.ymin()+" * "+x.rect.xmax()+" ,"+x.rect.ymax());
         inorder(x.rt, q);
     }
-
+*/
     public static void main(String args[]){
         //Unit testing for the PointSET class.
     }
