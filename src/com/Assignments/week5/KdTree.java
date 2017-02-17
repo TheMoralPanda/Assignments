@@ -133,13 +133,21 @@ public class KdTree {
         if(rect==null)
             throw new java.lang.NullPointerException();
         ArrayList<Point2D> list = new ArrayList<Point2D>();
-        /*for(Point2D p: points){
-            if(rect.contains(p))
-                list.add(p);
-        }
-        return list;*/
-        return null;
+        range(root,rect,list);
+        return list;
     }
+
+    private void range(Node x, RectHV query, ArrayList<Point2D> list){
+        if(x != null && x.rect.intersects(query))
+        {
+            if(query.contains(x.p))
+                list.add(x.p);
+            range(x.lb,query,list);//left subtree
+            range(x.rt,query,list);//right subtree
+        }
+        return;
+    }
+
 
     public Point2D nearest(Point2D p){
         /* Returns a nearest neighbour in the set to the given point P */
@@ -157,6 +165,8 @@ public class KdTree {
         return champ;*/
         return null;
     }
+
+
 
     public Iterable<Point2D> keys()
     {
