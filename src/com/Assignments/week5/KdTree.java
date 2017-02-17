@@ -11,8 +11,8 @@ import java.util.ArrayList;
  * Created by Vigneshwar_V on 2/13/2017.
  */
 public class KdTree {
-    public Node root;
-    public int n;
+    private Node root;
+    private int n;
 
     private static class Node{
         /* Node data type.*/
@@ -152,20 +152,24 @@ public class KdTree {
     public Point2D nearest(Point2D p){
         /* Returns a nearest neighbour in the set to the given point P */
         if(p==null)
-            throw new java.lang.NullPointerException();
-        /*Point2D champ = points.min();
-        double dist = champ.distanceTo(p);
-
-        for(Point2D q : points){
-            if(q.distanceTo(p)<dist){
-                champ = q;
-                dist = q.distanceTo(p);
-            }
-        }
-        return champ;*/
-        return null;
+            return null;
+        return nearest(root,p,null);
     }
-
+    private Point2D nearest(Node x, Point2D query, Point2D champ){
+        if(x==root) {
+            champ = x.p;
+            return champ;
+        }else if(x.p.distanceTo(query)<champ.distanceTo(query))
+            champ = x.p;
+        if(x.lb.rect.contains(query)) {
+            if (champ.distanceTo(query) > x.lb.rect.distanceTo(query))
+                champ = nearest(x.lb, query, champ);
+        }else{
+            if (champ.distanceTo(query) > x.rt.rect.distanceTo(query))
+                champ = nearest(x.rt, query, champ);
+        }
+        return champ;
+    }
 
 
     public Iterable<Point2D> keys()
