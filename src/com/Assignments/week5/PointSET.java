@@ -1,4 +1,4 @@
-package com.Assignments.week5;
+//package com.Assignments.week5;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by Vigneshwar_V on 2/13/2017.
  */
 public class PointSET {
-    SET<Point2D> points;
+    private SET<Point2D> points;
 
 
     public PointSET(){

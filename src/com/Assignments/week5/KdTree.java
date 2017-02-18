@@ -60,13 +60,14 @@ public class KdTree {
             cmp = (p.x() < x.p.x()) ? -1 : ((p.x() > x.p.x()) ? +1 : 0);
             if(cmp<0)
                 xmax = x.p.x();
-            else if(cmp>0)
+            else
                 xmin = x.p.x();
+
         }else {
             cmp = (p.y() < x.p.y()) ? -1 : ((p.y() > x.p.y()) ? +1 : 0);
             if(cmp<0)
                 ymax = x.p.y();
-            else if(cmp>0)
+            else 
                 ymin = x.p.y();
         }
         if(cmp<0)
@@ -74,7 +75,13 @@ public class KdTree {
         else if(cmp>0)
             x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
         else{
-            x.p = p;
+            if(p.x()==x.p.x() && p.y()==x.p.y())
+                x.p = p;
+            else if(p.y()==x.p.y())
+                x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
+            else if(p.x()==x.p.x())
+                x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
+
         }
         return x;
     }
@@ -189,7 +196,7 @@ public class KdTree {
     }
 
 
-   /* public Iterable<Point2D> keys()
+ /*   public Iterable<Point2D> keys()
     {
         Queue<Point2D> q = new Queue<Point2D>();
         inorder(root, q);
@@ -206,5 +213,28 @@ public class KdTree {
 */
     public static void main(String args[]){
         //Unit testing for the PointSET class.
+        KdTree kt = new KdTree();
+        kt.insert(new Point2D(0.7,0.2));        
+        System.out.println(kt.size());
+        System.out.println(kt.contains(new Point2D(0.7,0.2)));
+        System.out.println(kt.contains(new Point2D(0.5,0.4)));
+        kt.insert(new Point2D(0.5,0.4));
+        System.out.println(kt.size());
+        kt.insert(new Point2D(0.2,0.3));
+        System.out.println(kt.size());
+        kt.insert(new Point2D(0.4,0.7));
+        System.out.println(kt.size());
+        kt.insert(new Point2D(0.9,0.6));
+        System.out.println(kt.size());
+        kt.insert(new Point2D(0.9,0.2));
+        System.out.println(kt.size());
+        kt.insert(new Point2D(0.9,0.8));
+        System.out.println(kt.size());
+        kt.insert(new Point2D(0.9,0.7));
+        System.out.println(kt.size());
+//
+      //  for(Point2D p : kt.keys())
+      //      System.out.println(p.toString());
+
     }
 }
