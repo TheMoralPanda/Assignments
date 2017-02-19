@@ -1,4 +1,4 @@
-//package com.Assignments.week5;
+
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
@@ -60,8 +60,7 @@ public class KdTree {
             return x;
         }
         int cmp;
-        if(level%2==0) {
-           // cmp = (p.x() < x.p.x()) ? -1 : ((p.x() > x.p.x()) ? +1 : 0);
+        if(level%2==0) {           
             if(p.x()<x.p.x()){
                 xmax = x.p.x();
                 x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
@@ -71,8 +70,7 @@ public class KdTree {
                 x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
             }
 
-        }else {
-            //cmp = (p.y() < x.p.y()) ? -1 : ((p.y() > x.p.y()) ? +1 : 0);
+        }else {            
             if(p.y()<x.p.y()){
                 ymax = x.p.y();
                 x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
@@ -81,19 +79,6 @@ public class KdTree {
                 x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
             }
         }
-       // if(cmp<0)
-       //     x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
-       // else if(cmp>0)
-        //    x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
-       // else{
-        //    if(p.x()==x.p.x() && p.y()==x.p.y())
-        //        x.p = p;
-        //    else if(p.y()==x.p.y())
-        //        x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
-        //    else if(p.x()==x.p.x())
-        //        x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
-
-       // }
         return x;
     }
 
@@ -104,7 +89,6 @@ public class KdTree {
         if (x == null) {
             return false;
         }
-        //System.out.println("X.p value is"+x.p.x()+", "+x.p.y());
         if (x.p.equals(p)) {
 
             return true;
@@ -177,15 +161,7 @@ public class KdTree {
     }
 
     private void range(Node x, RectHV query, ArrayList<Point2D> list){
-    /*    if(x != null && x.rect.intersects(query))
-        {
-            if(query.contains(x.p))
-                list.add(x.p);
-            range(x.lb,query,list);//left subtree
-            range(x.rt,query,list);//right subtree
-        }
-        return;
-*/
+
         if (x == null) {
             return;
         }
@@ -242,47 +218,6 @@ public class KdTree {
     }*/
 
     public static void main(String args[]){
-        //Unit testing for the PointSET class.
-        KdTree kt = new KdTree();
-        kt.insert(new Point2D(0.7,0.2));  
-
-        System.out.println(kt.size());
-        System.out.println("0.7,0.2");
-        System.out.println(kt.contains(new Point2D(0.7,0.2)));
-        //System.out.println(kt.contains(new Point2D(0.5,0.4)));
-        kt.insert(new Point2D(0.5,0.4));
-
-        System.out.println(kt.size());
-        System.out.println("0.5,0.4");
-        System.out.println(kt.contains(new Point2D(0.5,0.4)));
-        kt.insert(new Point2D(0.1,0.3));
-        System.out.println(kt.size());
-        System.out.println("0.1,0.3");
-        System.out.println(kt.contains(new Point2D(0.1,0.3)));
-        kt.insert(new Point2D(0.8,0.73));
-        System.out.println(kt.size());
-        System.out.println("0.8,0.73");
-        System.out.println(kt.contains(new Point2D(0.8,0.73)));
-        kt.insert(new Point2D(0.9,0.6));
-        System.out.println(kt.size());
-        System.out.println("0.9,0.6");
-        System.out.println(kt.contains(new Point2D(0.9,0.6)));
-        kt.insert(new Point2D(0.19,0.22));
-        System.out.println(kt.size());
-        System.out.println("0.19,0.22");
-        System.out.println(kt.contains(new Point2D(0.19,0.22)));
-        kt.insert(new Point2D(0.49,0.18));
-        System.out.println(kt.size());
-        System.out.println("0.49,0.18");
-        System.out.println(kt.contains(new Point2D(0.49,0.18)));
-        kt.insert(new Point2D(0.59,0.97));
-        System.out.println(kt.size());
-        System.out.println("0.59,0.97");
-        System.out.println(kt.contains(new Point2D(0.59,0.97)));
-
-//
-       // for(Point2D p : kt.keys())
-       //     System.out.println(p.toString());
-
+     
     }
 }
