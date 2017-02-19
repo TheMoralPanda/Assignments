@@ -69,16 +69,20 @@ public class PointSET {
         /* Returns a nearest neighbour in the set to the given point P */
         if(p==null)
             throw new java.lang.NullPointerException();
-        Point2D champ = points.min();
-        double dist = champ.distanceTo(p);
+        if(points.size()!=0){
+            Point2D champ = points.min();
+            double dist = champ.distanceTo(p);
 
-        for(Point2D q : points){
-            if(q.distanceTo(p)<dist){
-                champ = q;
-                dist = q.distanceTo(p);
+            for(Point2D q : points){
+                if(q.distanceTo(p)<dist){
+                    champ = q;
+                    dist = q.distanceTo(p);
+                }
             }
-        }
-        return champ;
+            return champ;
+         }
+        else
+            return null;
     }
 
     public static void main(String args[]){

@@ -55,45 +55,58 @@ public class KdTree {
             n++;
             return new Node(p,new RectHV(xmin,ymin,xmax,ymax),null, null);
         }
+        if(p.equals(x.p)){
+            x.p = p;
+            return x;
+        }
         int cmp;
         if(level%2==0) {
-            cmp = (p.x() < x.p.x()) ? -1 : ((p.x() > x.p.x()) ? +1 : 0);
-            if(cmp<0)
+           // cmp = (p.x() < x.p.x()) ? -1 : ((p.x() > x.p.x()) ? +1 : 0);
+            if(p.x()<x.p.x()){
                 xmax = x.p.x();
-            else
+                x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
+            }
+            else{
                 xmin = x.p.x();
+                x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
+            }
 
         }else {
-            cmp = (p.y() < x.p.y()) ? -1 : ((p.y() > x.p.y()) ? +1 : 0);
-            if(cmp<0)
+            //cmp = (p.y() < x.p.y()) ? -1 : ((p.y() > x.p.y()) ? +1 : 0);
+            if(p.y()<x.p.y()){
                 ymax = x.p.y();
-            else 
-                ymin = x.p.y();
-        }
-        if(cmp<0)
-            x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
-        else if(cmp>0)
-            x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
-        else{
-            if(p.x()==x.p.x() && p.y()==x.p.y())
-                x.p = p;
-            else if(p.y()==x.p.y())
                 x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
-            else if(p.x()==x.p.x())
+            }else{ 
+                ymin = x.p.y();
                 x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
-
+            }
         }
+       // if(cmp<0)
+       //     x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
+       // else if(cmp>0)
+        //    x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
+       // else{
+        //    if(p.x()==x.p.x() && p.y()==x.p.y())
+        //        x.p = p;
+        //    else if(p.y()==x.p.y())
+        //        x.lb = insert(x.lb, p, level+1,xmin, ymin, xmax, ymax);
+        //    else if(p.x()==x.p.x())
+        //        x.rt = insert(x.rt, p, level+1,xmin, ymin, xmax, ymax);
+
+       // }
         return x;
     }
 
-    public boolean contains(Point2D p) {
-        return contains(root, p, 1);
+  public boolean contains(Point2D p) {
+        return contains(root, p, 0);
     }
     private boolean contains(Node x, Point2D p, int depth) {
         if (x == null) {
             return false;
         }
+        //System.out.println("X.p value is"+x.p.x()+", "+x.p.y());
         if (x.p.equals(p)) {
+
             return true;
         }
         if (depth % 2 == 0) {
@@ -121,6 +134,8 @@ public class KdTree {
         }
 
     }
+
+
 
 
     public void draw() {
@@ -162,7 +177,7 @@ public class KdTree {
     }
 
     private void range(Node x, RectHV query, ArrayList<Point2D> list){
-        if(x != null && x.rect.intersects(query))
+    /*    if(x != null && x.rect.intersects(query))
         {
             if(query.contains(x.p))
                 list.add(x.p);
@@ -170,6 +185,21 @@ public class KdTree {
             range(x.rt,query,list);//right subtree
         }
         return;
+*/
+        if (x == null) {
+            return;
+        }
+        if (query.contains(x.p)) {
+            list.add(x.p);
+        }
+        if (x.rt != null && query.intersects(x.rt.rect)) {
+            range(x.rt, query, list);
+        }
+        if (x.lb != null && query.intersects(x.lb.rect)) {
+            range(x.lb, query, list);
+        }
+       
+        
     }
 
 
@@ -196,7 +226,7 @@ public class KdTree {
     }
 
 
- /*   public Iterable<Point2D> keys()
+   /* public Iterable<Point2D> keys()
     {
         Queue<Point2D> q = new Queue<Point2D>();
         inorder(root, q);
@@ -209,32 +239,50 @@ public class KdTree {
         q.enqueue(x.p);
         System.out.println(x.p.toString()+"   -   "+x.rect.xmin()+","+x.rect.ymin()+" * "+x.rect.xmax()+" ,"+x.rect.ymax());
         inorder(x.rt, q);
-    }
-*/
+    }*/
+
     public static void main(String args[]){
         //Unit testing for the PointSET class.
         KdTree kt = new KdTree();
-        kt.insert(new Point2D(0.7,0.2));        
+        kt.insert(new Point2D(0.7,0.2));  
+
         System.out.println(kt.size());
+        System.out.println("0.7,0.2");
         System.out.println(kt.contains(new Point2D(0.7,0.2)));
-        System.out.println(kt.contains(new Point2D(0.5,0.4)));
+        //System.out.println(kt.contains(new Point2D(0.5,0.4)));
         kt.insert(new Point2D(0.5,0.4));
+
         System.out.println(kt.size());
-        kt.insert(new Point2D(0.2,0.3));
+        System.out.println("0.5,0.4");
+        System.out.println(kt.contains(new Point2D(0.5,0.4)));
+        kt.insert(new Point2D(0.1,0.3));
         System.out.println(kt.size());
-        kt.insert(new Point2D(0.4,0.7));
+        System.out.println("0.1,0.3");
+        System.out.println(kt.contains(new Point2D(0.1,0.3)));
+        kt.insert(new Point2D(0.8,0.73));
         System.out.println(kt.size());
+        System.out.println("0.8,0.73");
+        System.out.println(kt.contains(new Point2D(0.8,0.73)));
         kt.insert(new Point2D(0.9,0.6));
         System.out.println(kt.size());
-        kt.insert(new Point2D(0.9,0.2));
+        System.out.println("0.9,0.6");
+        System.out.println(kt.contains(new Point2D(0.9,0.6)));
+        kt.insert(new Point2D(0.19,0.22));
         System.out.println(kt.size());
-        kt.insert(new Point2D(0.9,0.8));
+        System.out.println("0.19,0.22");
+        System.out.println(kt.contains(new Point2D(0.19,0.22)));
+        kt.insert(new Point2D(0.49,0.18));
         System.out.println(kt.size());
-        kt.insert(new Point2D(0.9,0.7));
+        System.out.println("0.49,0.18");
+        System.out.println(kt.contains(new Point2D(0.49,0.18)));
+        kt.insert(new Point2D(0.59,0.97));
         System.out.println(kt.size());
+        System.out.println("0.59,0.97");
+        System.out.println(kt.contains(new Point2D(0.59,0.97)));
+
 //
-      //  for(Point2D p : kt.keys())
-      //      System.out.println(p.toString());
+       // for(Point2D p : kt.keys())
+       //     System.out.println(p.toString());
 
     }
 }
